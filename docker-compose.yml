@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  tileserver:
+    image: maptiler/tileserver-gl
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./test_data:/data"
