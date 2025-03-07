@@ -1,0 +1,194 @@
+{
+  "version": 8,
+  "name": "Custom",
+  "metadata": {"maputnik:renderer": "mlgljs"},
+  "center": [
+    61.481684,
+    55.14501
+  ],
+  "zoom": 16,
+  "sources": {
+    "cm83cxl": {
+      "type": "vector",
+      "url": "mbtiles://{test_over}"
+    }
+  },
+  "sprite": "",
+  "glyphs": "{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "Buildings",
+      "type": "fill",
+      "source": "cm83cxl",
+      "source-layer": "Buildings",
+      "paint": {
+        "fill-antialias": true,
+        "fill-color": [
+          "match",
+          ["get", "b_type"],
+          "perm",
+          "#65aacf",
+          "temp",
+          "#cb9696",
+          "#cccccc"
+        ]
+      }
+    },
+    {
+      "id": "Transformators",
+      "type": "fill",
+      "source": "cm83cxl",
+      "source-layer": "Transformators",
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(219, 171, 249, 1)", "fill-antialias": true}
+    },
+    {
+      "id": "Lines",
+      "type": "line",
+      "source": "cm83cxl",
+      "source-layer": "Lines",
+      "paint": {
+        "line-width": 1,
+        "line-color": [
+          "match",
+          ["get", "l_type"],
+          "380v",
+          "#4689ff",
+          "220v",
+          "#46d5ff",
+          "20kv",
+          "#7c0aca",
+          "#777777"
+        ]
+      }
+    },
+
+    {
+      "id": "building-3d",
+      "type": "fill-extrusion",
+      "source": "cm83cxl",
+      "source-layer": "Buildings",
+      "filter": ["all", ["!has", "hide_3d"]],
+      "paint": {
+        "fill-extrusion-base": [
+          "case",
+          ["has", "render_min_height"],
+          ["get", "render_min_height"],
+          0
+        ],
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          14, 0, 
+          16, [
+            "coalesce",
+            ["get", "render_height"],
+            20    
+          ]
+        ],
+        "fill-extrusion-color": [
+          "match",
+          ["get", "b_type"],
+          "perm",
+          "#65aacf",
+          "temp",
+          "#cb9696",
+          "#cccccc"
+        ],
+        "fill-extrusion-opacity": 0.6
+      }
+    },
+
+    {
+      "id": "transformators-3d",
+      "type": "fill-extrusion",
+      "source": "cm83cxl",
+      "source-layer": "Transformators",
+      "filter": ["all", ["!has", "hide_3d"]],
+      "paint": {
+        "fill-extrusion-base": [
+          "case",
+          ["has", "render_min_height"],
+          ["get", "render_min_height"],
+          0
+        ],
+        "fill-extrusion-height": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          14, 0, 
+          16, [
+            "coalesce",
+            ["get", "render_height"],
+            20    
+          ]
+        ],
+        "fill-extrusion-color": [
+          "case",
+          ["has", "colour"],
+          ["get", "colour"],
+          "hsl(277, 31%, 60%)"
+        ],
+        "fill-extrusion-opacity": 0.6
+      }
+    },
+
+    {
+      "id": "LLabel",
+      "type": "symbol",
+      "source": "cm83cxl",
+      "source-layer": "Lines",
+      "filter": ["all"],
+      "layout": {
+        "visibility": "visible",
+        "symbol-placement": "line",
+        "symbol-z-order": "auto",
+        "text-field": "{l_label}",
+        "text-font": ["Open Sans Regular"],
+        "text-anchor": "bottom-left",
+        "text-size": 10
+      },
+      "paint": {
+        "text-color": [
+          "match",
+          ["get", "l_type"],
+          "380v",
+          "#4689ff",
+          "220v",
+          "#46d5ff",
+          "20kv",
+          "#7c0aca",
+          "#cccccc"
+        ]
+      }
+    },
+    {
+      "id": "TLabel",
+      "type": "symbol",
+      "source": "cm83cxl",
+      "source-layer": "Transformators",
+      "layout": {
+        "text-field": "{t_label}",
+        "text-font": ["Open Sans Regular"],
+        "text-size": 10,
+        "text-justify": "center",
+        "text-anchor": "center"
+      }
+    },
+    {
+      "id": "BLabel",
+      "type": "symbol",
+      "source": "cm83cxl",
+      "source-layer": "Buildings",
+      "layout": {
+        "text-field": "{b_label}",
+        "text-font": ["Open Sans Regular"],
+        "text-size": 10,
+        "text-justify": "center",
+        "text-anchor": "center"
+      }
+    }
+  ],
+  "id": "custom"
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>MapLibre: Local OpenMapTiles + test_over</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <!-- Подключаем MapLibre через CDN -->
+  <script src="maplibre-gl.js"></script>
+  <link href="maplibre-gl.css" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+  // Инициализируем карту MapLibre, используя наш custom-стиль (my_custom_style.json)
+  var map = new maplibregl.Map({
+    container: 'map',
+    style: 'https://casino-powers-toward-rehabilitation.trycloudflare.com/styles/custom/style.json', 
+    center: [61.0, 55.0], // Примерный центр для Челябинской области
+    zoom: 9
+  });
+
+  // Элементы управления: масштаб, компас и т.п. (опционально)
+  map.addControl(new maplibregl.NavigationControl(), 'top-left');
+</script>
+</body>
+</html>

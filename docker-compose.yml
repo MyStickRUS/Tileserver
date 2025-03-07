@@ -7,3 +7,10 @@ services:
       - "8080:8080"
     volumes:
       - "./test_data:/data"
+  web:
+    image: nginx:latest
+    container_name: webserver
+    ports:
+      - "8081:80"
+    volumes:
+      - "./www:/usr/share/nginx/html:ro"
