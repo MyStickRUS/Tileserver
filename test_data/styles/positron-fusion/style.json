@@ -1114,7 +1114,7 @@
       "source": "cm83cxl",
       "source-layer": "Lines",
       "paint": {
-        "line-width": 1,
+        "line-width": 2,
         "line-color": [
           "match",
           ["get", "l_type"],
@@ -1146,8 +1146,8 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          14, 0, 
-          16, [
+          14.5, 0, 
+          15, [
             "coalesce",
             ["get", "render_height"],
             20    
@@ -1183,11 +1183,11 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          14, 0, 
-          16, [
+          14.5, 0, 
+          15, [
             "coalesce",
             ["get", "render_height"],
-            20    
+            10    
           ]
         ],
         "fill-extrusion-color": [

@@ -6,46 +6,11 @@
     }
   },
   "styles": {
-    "test-style": {
-      "style": "osm-bright/style.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
-      }
-    },
-    "klokantech-basic": {
-      "style": "klokantech-basic/style.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
-      }
-    },
-    "light-style": {
-      "style": "positron/style.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
-      }
-    },
-    "dark-style": {
-      "style": "dark-matter/style.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
-      }
-    },
-    "3d-style": {
-      "style": "3dstyle/style.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
-      }
-    },
     "custom": {
       "style": "positron-fusion/style.json",
       "tilejson": {
-        "type": "overlay"
-        
+        "type": "overlay",
+        "bounds": [60.714000, 54.886000, 62.070000, 55.438000]
       }
     }
   },
