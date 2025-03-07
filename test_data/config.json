@@ -16,7 +16,7 @@
   },
   "data": {
     "openmaptiles": {
-      "mbtiles": "chelyaba.mbtiles"
+      "mbtiles": "maptiler-osm-2020-02-10-v3.11-russia.mbtiles"
     },
     "test_over": {
       "mbtiles": "test_over.mbtiles"

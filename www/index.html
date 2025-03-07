@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>MapLibre: Popup & pointer cursor</title>
+  <title>geomap test</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <!-- Подключаем MapLibre (через CDN) -->
   <script src="maplibre-gl.js"></script>
@@ -22,134 +22,126 @@
 </head>
 <body>
 <div id="map"></div>
-<script>
-  var map = new maplibregl.Map({
-    container: 'map',
-    style: 'https://casino-powers-toward-rehabilitation.trycloudflare.com/styles/custom/style.json', 
 
+<script>
+// ========= 1) Функции для чтения/записи хеша =========
+
+// Считываем хеш вида #zoom/lat/lon/bearing/pitch
+function parseHash() {
+  if (window.location.hash) {
+    const hash = window.location.hash.replace('#', '');
+    const parts = hash.split('/');
+    if (parts.length >= 3) {
+      const zoom = parseFloat(parts[0]);
+      const lat = parseFloat(parts[1]);
+      const lon = parseFloat(parts[2]);
+      const bearing = parts[3] ? parseFloat(parts[3]) : 0;
+      const pitch   = parts[4] ? parseFloat(parts[4]) : 0;
+      return { zoom, lat, lon, bearing, pitch };
+    }
+  }
+  return null;
+}
+
+// Записываем текущие координаты в хеш
+function updateHash(map) {
+  const center = map.getCenter();     // {lng, lat}
+  const zoom = map.getZoom();
+  const bearing = map.getBearing();
+  const pitch = map.getPitch();
+
+  const precision = 5;
+  const hashStr = [
+    zoom.toFixed(2),
+    center.lat.toFixed(precision),
+    center.lng.toFixed(precision),
+    bearing.toFixed(1),
+    pitch.toFixed(1)
+  ].join('/');
+
+  window.location.hash = hashStr;
+}
+
+// ========= 2) Получаем начальные параметры из хеша или берем дефолт =========
+const startParams = parseHash() || {
+  zoom: 14.36,
+  lat: 55.1456,
+  lon: 61.46624,
+  bearing: -24,
+  pitch: 64
+};
+
+// ========= 3) Создаём карту, используя прочитанные значения =========
+var map = new maplibregl.Map({
+  container: 'map',
+  style: 'http://91.84.110.143:8080/styles/custom/style.json',
+  center: [startParams.lon, startParams.lat],
+  zoom: startParams.zoom,
+  bearing: startParams.bearing,
+  pitch: startParams.pitch
+});
+
+// Добавляем элементы управления
+map.addControl(new maplibregl.NavigationControl(), 'top-left');
+
+// Логика обновления хеша при движении карты
+map.on('moveend', () => updateHash(map));
+map.on('pitchend', () => updateHash(map));
+map.on('rotateend', () => updateHash(map));
+
+// ========= 4) Логика клика, popup и "pointer" курсора =========
+const layersOfInterest = ['Buildings','Transformators','Lines']; 
+const hitRadius = 5;
+
+map.on('load', function () {
+  // Показываем Popup по клику
+  map.on('click', function (e) {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: layersOfInterest,
+      radius: hitRadius
+    });
+    if (!features.length) return;
+    
+    const feature = features[0];
+
+    new maplibregl.Popup({ closeOnClick: true })
+      .setLngLat(e.lngLat)
+      .setHTML(
+        '<h3>Свойства объекта:</h3>' +
+        '<pre>' + JSON.stringify(feature.properties, null, 2) + '</pre>'
+      )
+      .addTo(map);
   });
 
-  // Элементы управления
-  map.addControl(new maplibregl.NavigationControl(), 'top-left');
-
-  // Ваш слой(и), по которым хотим кликать и менять курсор
-  const layersOfInterest = ['Buildings','Transformators','Lines']; 
-  const hitRadius = 5; // Увеличиваем радиус поиска (px), чтобы легче попадать по тонким объектам
-
-  map.on('load', function () {
-    // 1) Обработка кликов: показываем popup
-    map.on('click', function (e) {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: layersOfInterest,
-        radius: hitRadius
-      });
-      if (!features.length) return;
-      
-      const feature = features[0];
-
-      new maplibregl.Popup({ closeOnClick: true })
-        .setLngLat(e.lngLat)
-        .setHTML(
-          '<h3>Свойства объекта:</h3>' +
-          '<pre>' + JSON.stringify(feature.properties, null, 2) + '</pre>'
-        )
-        .addTo(map);
+  // Меняем курсор на "pointer", если находимся над объектом
+  map.on('mousemove', function(e) {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: layersOfInterest,
+      radius: hitRadius
     });
-
-    // 2) Смена курсора на "pointer" при наведении, обратно на "" при уходе
-    //    Будем реагировать на движение мыши и проверять, есть ли под курсором объект
-    map.on('mousemove', function(e) {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: layersOfInterest,
-        radius: hitRadius
-      });
-      if (features.length) {
-        map.getCanvas().style.cursor = 'pointer';
-      } else {
-        map.getCanvas().style.cursor = '';
-      }
-    });
+    if (features.length) {
+      map.getCanvas().style.cursor = 'pointer';
+    } else {
+      map.getCanvas().style.cursor = '';
+    }
   });
-</script>
+});
 
-<script>
-    // 1) Функция разбора хеша вида #zoom/lat/lon/bearing/pitch
-    function parseHash() {
-      if (window.location.hash) {
-        // убираем '#' в начале
-        const hash = window.location.hash.replace('#', '');
-        // разбиваем по "/"
-        const parts = hash.split('/');
-        if (parts.length >= 3) {
-          // Обязательные три параметра: zoom, lat, lon
-          const zoom = parseFloat(parts[0]);
-          const lat = parseFloat(parts[1]);
-          const lon = parseFloat(parts[2]);
-          // Если есть bearing, pitch – читаем их, иначе 0
-          const bearing = parts[3] ? parseFloat(parts[3]) : 0;
-          const pitch   = parts[4] ? parseFloat(parts[4]) : 0;
-          return { zoom, lat, lon, bearing, pitch };
-        }
-      }
-      return null;
-    }
-    
-    // 2) Функция формирования хеша из параметров
-    function updateHash(map) {
-      const center = map.getCenter();     // {lng, lat}
-      const zoom = map.getZoom();
-      const bearing = map.getBearing();
-      const pitch = map.getPitch();
-    
-      // Округлим немного, чтобы не было гигантской дроби
-      const precision = 5;
-      const hashStr = [
-        zoom.toFixed(2),
-        center.lat.toFixed(precision),
-        center.lng.toFixed(precision),
-        bearing.toFixed(1),
-        pitch.toFixed(1)
-      ].join('/');
-    
-      window.location.hash = hashStr;
-    }
-    
-    // get start
-    const startParams = parseHash() || {
-      zoom: 14.36,
-      lat: 55.1456,
-      lon: 61.46624,
-      bearing: -24,
-      pitch: 64
-    };
-    
-    
-    // 5) При завершении перемещения/вращения/наклона обновляем адресную строку
-    //    moveend срабатывает и после zoomend/pitchend/rotateend
-    map.on('moveend', () => updateHash(map));
-    map.on('pitchend', () => updateHash(map));
-    map.on('rotateend', () => updateHash(map));
-    </script>
-
-<script>
-    
+// ========= 5) Пример мигания для Buildings (id=2588) =========
 var colorA = '#ff0000';
 var colorB = '#00ff00';
 var current = colorA;
 
 setInterval(function() {
   current = (current === colorA) ? colorB : colorA;
-  // Меняем всё выражение целиком:
   map.setPaintProperty('Buildings', 'fill-color', [
     'case',
     ['==', ['get', 'id'], 2588],
     current,
-    '#cccccc' // цвет для остальных
+    '#cccccc'
   ]);
 }, 1000);
 </script>
-
-
 
 </body>
 </html>
