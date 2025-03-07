@@ -16,7 +16,7 @@
   },
   "data": {
     "openmaptiles": {
-      "mbtiles": "maptiler-osm-2020-02-10-v3.11-russia.mbtiles"
+      "mbtiles": "russia.mbtiles"
     },
     "test_over": {
       "mbtiles": "test_over.mbtiles"

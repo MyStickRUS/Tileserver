@@ -8,7 +8,7 @@
     61.411650,
     55.142740
   ],
-  "zoom": 10,
+  "zoom": 11,
   "sources": {
     "openmaptiles": {
       "type": "vector",
@@ -1146,7 +1146,7 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          14.5, 0, 
+          14.8, 0, 
           15, [
             "coalesce",
             ["get", "render_height"],
@@ -1183,7 +1183,7 @@
           "interpolate",
           ["linear"],
           ["zoom"],
-          14.5, 0, 
+          14.9, 0, 
           15, [
             "coalesce",
             ["get", "render_height"],

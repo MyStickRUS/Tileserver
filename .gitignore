@@ -2,4 +2,4 @@
 # ignore ALL .log files
 *.log
 # example map https://data.maptiler.com/downloads/tileset/osm/russia/
-maptiler-osm-2020-02-10-v3.11-russia.mbtiles
+*.mbtiles
