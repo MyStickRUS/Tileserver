@@ -139,18 +139,10 @@
         "text-halo-width": 1
       }
     },
-    {
-      "id": "building",
-      "type": "fill",
-      "source": "openmaptiles",
-      "source-layer": "building",
-      "minzoom": 12,
-      "paint": {
-        "fill-antialias": true,
-        "fill-color": "rgb(234, 234, 229)",
-        "fill-outline-color": "rgb(219, 219, 218)"
-      }
-    },
+
+    
+
+    
     {
       "id": "tunnel_motorway_casing",
       "type": "line",
@@ -1081,6 +1073,31 @@
 
 
 
+    {
+      "id": "building-3d",
+      "type": "fill-extrusion",
+      "source": "openmaptiles",
+      "source-layer": "building",
+      "filter": ["all", ["!has", "hide_3d"]],
+      "paint": {
+        "fill-extrusion-base": {
+          "property": "render_min_height",
+          "type": "identity"
+        },
+        "fill-extrusion-color": [
+          "case",
+          ["has", "colour"],
+          ["get", "colour"],
+          "hsl(39, 0%, 75%)"
+        ],
+        "fill-extrusion-height": {
+          "property": "render_height",
+          "type": "identity"
+        },
+        "fill-extrusion-opacity": 0.6
+      }
+    },
+
 
     {
       "id": "Buildings",
@@ -1130,7 +1147,7 @@
     },
 
     {
-      "id": "building-3d",
+      "id": "Buildings-3d",
       "type": "fill-extrusion",
       "source": "cm83cxl",
       "source-layer": "Buildings",
@@ -1140,7 +1157,7 @@
           "case",
           ["has", "render_min_height"],
           ["get", "render_min_height"],
-          0
+          7
         ],
         "fill-extrusion-height": [
           "interpolate",
